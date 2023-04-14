@@ -29,6 +29,9 @@
 #include "Adafruit_ILI9341.h"
 #include "XPT2046_Touchscreen.h"
 
+// Speed up touch calls
+#define SPI_SETTING     SPISettings(8000000, MSBFIRST, SPI_MODE0)
+
 // Hookup For the LCD and ESP32
 #define TFT_DC 13
 #define TFT_CS 12
@@ -43,8 +46,9 @@
 
 // Use hardware SPI (on ESP32, #18, #19, #5) and the above for CS/DC
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
-// If using the breakout, change pins as desired
+// Or change pins as desired
 //Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, COPI, TFT_CLK, TFT_RST, CIPO);
+
 XPT2046_Touchscreen ts(TCH_CS);
 // TODO: Make second demo that uses IRQ.
 //XPT2046_Touchscreen ts(TCH_CS,TCH_IRQ);
@@ -61,7 +65,6 @@ void setup() {
   
   ts.begin();  // I believe this must be called before tft.begin() to work right.
   tft.begin();
-  
 
   // read diagnostics (optional but can help debug problems)
   uint8_t x = tft.readcommand8(ILI9341_RDMODE);
